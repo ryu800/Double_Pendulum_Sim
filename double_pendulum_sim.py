@@ -7,8 +7,8 @@ g = 9.81 #m/s^2[down]
 m1 = 1 #kg
 m2 = 1 #kg
 l1 = 1 #m
-l2 = 2 #m
-dt = 0.05 #delta time, the time between each step/drawing of the visualisation
+l2 = 1 #m
+dt = 0.01 #delta time, the time between each step/drawing of the visualisation
 t_max = 15 # maximum time for the simulation to run for
 
 n_steps=int(t_max / dt) # number of frames per simulation
@@ -55,19 +55,34 @@ for i in range(n_steps): # updating values every frame.
     theta1, theta2, av1, av2 = step(theta1,theta2,av1,av2,dt) #updates values each step/frame
 
 #convert angles in positions (x1,y1) (x2,y2)
-x1 = l1*(np.sin(theta1))
-y1 = -l1*(np.cos(theta1))
+x1 = l1*(np.sin(theta1_history))
+y1 = -l1*(np.cos(theta1_history))
 
-x2 = l1*(np.sin(theta1))+l2*(np.sin(theta2))
-y2 = -l1*(np.cos(theta1))-l2*(np.cos(theta2))
+x2 = l1*(np.sin(theta1_history))+l2*(np.sin(theta2_history))
+y2 = -l1*(np.cos(theta1_history))-l2*(np.cos(theta2_history))
 
 #setting up visuals
-
 fig, ax = plt.subplots(figsize=(8,8)) 
 ax.set_xlim(-(l1+l2+1),l1+l2+1) #domain is 1 unit greater the max arms length on either side
 ax.set_ylim(-(l1+l2+1),l1+l2+1)
 ax.set_aspect('equal')
 
+line, = ax.plot([],[], "o-") # x y as arrrays so i can animate through them with my theta1_history
+trail, = ax.plot([],[],'-')
+
+def init(): #starting state for animation
+    line.set_data([],[])
+    trail.set_data([],[])
+    return line, trail
+
+def animate(i):
+    line.set_data([0,x1[i],x2[i]], [0,y1[i],y2[i]]) #draws the line from origin to mass one to mass two updates as i increases because i is frame number
+    start=max(0, i-200)
+    trail.set_data(x2[start:i], y2[start:i])
+
+    return line, trail
+
+ani = animation.FuncAnimation(fig, animate, frames=n_steps, init_func=init, interval=dt*1000, blit=True)
 plt.show()
 
 
