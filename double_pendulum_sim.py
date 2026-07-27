@@ -22,8 +22,17 @@ av2 = 0 #rad/s
 
 
 def acceleration():
-    pass
+    denom=(m2*(l1**2)*(l2**2))(m1+m2)-m2*(np.cos(theta1-theta2)**2)
+    delta=theta1-theta2
 
+    alpha1 = (
+        (m2*l1*(l2**2))*(-m2*l2*(av2**2)*(np.sin(delta))-(m1+m2)*g*(np.sin(theta1))-m2*l1*(av1**2)*(np.sin(delta))*(np.cos(delta))+m2*g*(np.sin(theta2))*(np.cos(delta))) / denom
+    )
+
+    alpha2 = (
+        (m2*(l1**2)*l2)((m1_m2)*l1*(av1**2)*(np.sin(delta))-(m1+m2)*g*(np.sin(theta2))+m2*l2*(av2**2)*(np.cos(delta))*(np.sin(delta))+(m1+m2)*g*(np.cos(delta))*(np.sin(theta1))) / denom
+    )
+    return alpha1, alpha2
 
 #   ani = animation.FuncAnimation(fig=, func=, frames=, interval=)
 
@@ -31,3 +40,4 @@ plt.show()
 
 
 
+print(np.cos(np.pi)**2)
