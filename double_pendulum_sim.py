@@ -8,22 +8,22 @@ m1 = 1 #kg
 m2 = 1 #kg
 l1 = 1 #m
 l2 = 1 #m
-dt = 0.01 #delta time, the time between each step/drawing of the visualisation
+dt = 0.02 #delta time, the time between each step/drawing of the visualisation
 t_max = 15 # maximum time for the simulation to run for
 
-n_steps=int(t_max / dt) # number of frames per simulation
+n_steps=int(t_max/dt) # number of frames per simulation
 
 # starting conditions
-theta1 = np.pi /3 #degrees # np.pi is numpy's approximation of pi
-theta2 = np.pi/2 #degrees
+theta1 = 3*np.pi/5 #degrees # np.pi is numpy's approximation of pi
+theta2 = np.pi/4 #degrees
 av1 = 0 #av= angular vecocity of each mass in rad/s angular velocity is the change in angular displacement over the change in time
 av2 = 0 #rad/s 
 
 
 
 def accelerations(theta1,theta2,av1,av2):
-    delta=theta1-theta2
-    denom=(m2*(l1**2)*(l2**2))*((m1+m2)-m2*(np.cos(delta)**2))
+    delta = theta1-theta2
+    denom = (m2*(l1**2)*(l2**2))*((m1+m2)-m2*(np.cos(delta)**2))
     
 
     alpha1 = (
@@ -39,10 +39,10 @@ def accelerations(theta1,theta2,av1,av2):
 def step(theta1,theta2,av1,av2,dt): #euler integration!! -will use RK4 in future :)
     alpha1, alpha2 = accelerations(theta1,theta2,av1,av2)
 
-    theta1_new=theta1 + av1*dt
-    theta2_new=theta2 + av2*dt
-    av1_new=av1 + alpha1*dt
-    av2_new=av2 +alpha2*dt
+    theta1_new = theta1 + av1*dt
+    theta2_new = theta2 + av2*dt
+    av1_new = av1 + alpha1*dt
+    av2_new = av2 + alpha2*dt
 
     return theta1_new, theta2_new, av1_new, av2_new
 
@@ -58,13 +58,13 @@ for i in range(n_steps): # updating values every frame.
 x1 = l1*(np.sin(theta1_history))
 y1 = -l1*(np.cos(theta1_history))
 
-x2 = l1*(np.sin(theta1_history))+l2*(np.sin(theta2_history))
-y2 = -l1*(np.cos(theta1_history))-l2*(np.cos(theta2_history))
+x2 = l1*(np.sin(theta1_history)) + l2*(np.sin(theta2_history))
+y2 = -l1*(np.cos(theta1_history)) - l2*(np.cos(theta2_history))
 
 #setting up visuals
 fig, ax = plt.subplots(figsize=(8,8)) 
-ax.set_xlim(-(l1+l2+1),l1+l2+1) #domain is 1 unit greater the max arms length on either side
-ax.set_ylim(-(l1+l2+1),l1+l2+1)
+ax.set_xlim(-(l1 + l2 + 1),l1 + l2 + 1) #domain is 1 unit greater the max arms length on either side
+ax.set_ylim(-(l1 + l2 + 1),l1 + l2 + 1)
 ax.set_aspect('equal')
 
 line, = ax.plot([],[], "o-") # x y as arrrays so i can animate through them with my theta1_history
